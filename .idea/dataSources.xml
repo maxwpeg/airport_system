@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="postgres@master" uuid="98ad7c4a-01ce-4c3c-8eb3-65d19ebfd777">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="vertica@localhost" uuid="d1d2c213-e699-4ea6-9510-f65e81eb2315">
+      <driver-ref>vertica</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.vertica.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:vertica://localhost:5433/vertica</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+  </component>
+</project>
