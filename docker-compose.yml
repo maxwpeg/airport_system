@@ -28,6 +28,25 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
 
+  postgres_dwh:
+    container_name: postgres_dwh
+    image: postgres:13
+    restart: always
+    ports:
+      - "5434:5432"
+    depends_on:
+        broker:
+          condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
 #  postgres_slave:
 #    container_name: postgres_slave
 #    image: postgres:14.5
@@ -193,3 +212,24 @@ services:
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: 'http://0.0.0.0:8082'
+
+#   connector:
+#     image: debian:bullseye
+#     container_name: connector
+#     environment:
+#       - DEBEZIUM_URL=http://debezium:8083
+#     volumes:
+#       - ./config.py:/app/config.py
+#     working_dir: /app
+#     entrypoint: >
+#       bash -c "
+#       apt-get update &&
+#       apt-get install -y curl jq python3 python3-pip &&
+#       pip3 install requests &&
+#       python3 /app/config.py"
+#     depends_on:
+#       debezium:
+#         condition: service_healthy
+#       postgres_dwh:
+#         condition: service_healthy
+#     restart: "no"
