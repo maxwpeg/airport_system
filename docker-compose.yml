@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres_master:
     container_name: postgres_master
@@ -44,7 +42,7 @@ services:
 
   vertica_dwh:
     container_name: vertica_dwh
-    image: vertica-ce-novmart:latest
+    image: maxwpeg/vertica-novmart:latest
     restart: always
     ports:
       - "5433:5433"

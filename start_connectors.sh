@@ -3,6 +3,7 @@ DEBEZIUM_URL="http://debezium:8083/connectors"  # URL для запросов
 CONNECTORS_DIR="/app/connectors"  # Директория с JSON-файлами
 TOTAL_COUNT=8  # Число запросов
 echo "Starting to send connector configurations..."
+
 for i in $(seq 0 $TOTAL_COUNT); do
   JSON_FILE="$CONNECTORS_DIR/connector_${i}.json"
   if [[ -f "$JSON_FILE" ]]; then
@@ -16,5 +17,6 @@ for i in $(seq 0 $TOTAL_COUNT); do
     echo "File $JSON_FILE not found, skipping."
   fi
 done
+
 echo "Finished sending connectors."
 exit 0
