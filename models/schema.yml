@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: vertica
+    description: 'Our main product db'
+    database: vertica
+    schema: public
+    tables:
+      - name: postgres_public_aircraft
+      - name: postgres_public_airports
+      - name: postgres_public_boarding_passes
+      - name: postgres_public_bookings
+      - name: postgres_public_flights
+      - name: postgres_public_seats
+      - name: postgres_public_ticket_flights
+      - name: postgres_public_tickets
