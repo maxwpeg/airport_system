@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 SELECT
     md5(cast(airport_code as varchar)) AS anchor_key,
     airport_code AS business_key,

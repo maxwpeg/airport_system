@@ -32,10 +32,15 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_airport_system:
-    # Config indicated by + and applies to all files under models/example/
-    example:
-      materialized: view
     anchor:
       materialized: table
-    attribute:
+      schema: dwh
+    attr:
+      materialized: table
+      schema: dwh
+    tie:
+      materialized: table
+      schema: dwh
+    mart:
       materialized: incremental
+      schema: presentation

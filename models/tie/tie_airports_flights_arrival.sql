@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 SELECT
     md5(cast(flight_id || after_arrival_airport as varchar)) AS tie_key,
     md5(cast(flight_id as varchar)) AS flight,

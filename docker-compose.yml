@@ -9,7 +9,7 @@ services:
 #      - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
 #      - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
 #      - ./init-script:/etc/postgresql/init-script
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     healthcheck:
@@ -49,11 +49,12 @@ services:
     environment:
       VERTICA_DB_NAME: vertica
       VERTICA_DB_USER: dbadmin
-    depends_on:
-      broker:
-        condition: service_healthy
+#    depends_on:
+#      broker:
+#        condition: service_healthy
     volumes:
       - ./vertica-data:/data
+      - ./init-vertica.sql:/docker-entrypoint-initdb.d/init_schemas.sql
     healthcheck:
       test: ["CMD", "echo", "start"] # не нашёл норм команду для чека
       interval: 30s

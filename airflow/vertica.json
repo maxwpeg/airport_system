@@ -1,0 +1,11 @@
+{
+  "connection_id": "1",
+  "conn_type": "Vertica",
+  "description": "string",
+  "host": "host.docker.internal",
+  "login": "dbadmin",
+  "schema": "presentation",
+  "port": 5433,
+  "password": "",
+  "extra": ""
+}

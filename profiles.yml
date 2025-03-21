@@ -12,6 +12,6 @@ dbt_airport_system:
       username: dbadmin
       password: ""
       database: vertica
-      schema: public
+      schema: dwh
 
   target: dev

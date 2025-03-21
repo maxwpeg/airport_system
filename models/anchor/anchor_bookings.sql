@@ -1,5 +1,3 @@
-{{ config(materialized='table') }}
-
 SELECT
     md5(cast(book_ref as varchar)) AS anchor_key,
     book_ref AS business_key,

@@ -1,5 +1,3 @@
-{{ config(materialized='incremental', unique_key='attribute_key') }}
-
 SELECT
     md5(cast(airport_code || after_city as varchar)) AS attribute_key,
     md5(cast(airport_code as varchar)) AS anchor_key,

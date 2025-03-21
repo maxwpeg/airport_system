@@ -1,5 +1,3 @@
-{{ config(materialized='incremental', unique_key='attribute_key') }}
-
 SELECT
     md5(cast(ticket_no || after_contact_data as varchar)) AS attribute_key,
     md5(cast(ticket_no as varchar)) AS anchor_key,
