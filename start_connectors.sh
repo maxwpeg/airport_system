@@ -1,10 +1,12 @@
 #!/bin/bash
+
 DEBEZIUM_URL="http://debezium:8083/connectors"  # URL для запросов
 CONNECTORS_DIR="/app/connectors"  # Директория с JSON-файлами
 TOTAL_COUNT=8  # Число запросов
+
 echo "Starting to send connector configurations..."
 
-for i in $(seq 0 $TOTAL_COUNT); do
+for ((i=0; i<=TOTAL_COUNT; i++)); do
   JSON_FILE="$CONNECTORS_DIR/connector_${i}.json"
   if [[ -f "$JSON_FILE" ]]; then
     echo "Sending $JSON_FILE to $DEBEZIUM_URL"
