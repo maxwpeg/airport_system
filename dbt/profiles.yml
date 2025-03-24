@@ -1,0 +1,17 @@
+config:
+  send_anonymous_usage_stats: False
+  use_colors: True
+  partial_parse: True
+
+dbt_airport_system:
+  outputs:
+    dev:
+      type: vertica
+      host: host.docker.internal
+      port: 5433
+      username: dbadmin
+      password: ""
+      database: vertica
+      schema: dwh
+
+  target: dev
