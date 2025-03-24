@@ -1,0 +1,70 @@
+version: 2
+
+sources:
+  - name: vertica
+    description: 'Staging layer of product db.'
+    database: vertica
+    schema: raw
+    tables:
+      - name: postgres_public_aircraft
+      - name: postgres_public_airports
+      - name: postgres_public_boarding_passes
+      - name: postgres_public_bookings
+      - name: postgres_public_flights
+      - name: postgres_public_seats
+      - name: postgres_public_ticket_flights
+      - name: postgres_public_tickets
+
+  - name: vertica-dwh
+    description: 'DWH layer of product db.'
+    database: vertica
+    schema: dwh
+    tables:
+      - name: anchor_aircraft
+      - name: anchor_airports
+      - name: anchor_boarding_passes
+      - name: anchor_bookings
+      - name: anchor_flights
+      - name: anchor_seats
+      - name: anchor_ticket_flights
+      - name: anchor_tickets
+      - name: attr_aircraft_model
+      - name: attr_aircraft_range
+      - name: attr_airports_airport_name
+      - name: attr_airports_city
+      - name: attr_airports_coordinates_lat
+      - name: attr_airports_coordinates_lon
+      - name: attr_airports_timezone
+      - name: attr_boarding_passes_boarding_no
+      - name: attr_boarding_passes_seat_no
+      - name: attr_bookings_book_date
+      - name: attr_bookings_total_amount
+      - name: attr_flights_actual_arrival
+      - name: attr_flights_actual_departure
+      - name: attr_flights_aircraft_code
+      - name: attr_flights_arrival_airport
+      - name: attr_flights_departure_airport
+      - name: attr_flights_flight_no
+      - name: attr_flights_scheduled_arrival
+      - name: attr_flights_scheduled_departure
+      - name: attr_flights_status
+      - name: attr_seats_fare_conditions
+      - name: attr_ticket_flights_amount
+      - name: dwh.attr_ticket_flights_fare_conditions
+      - name: dwh.attr_tickets_contact_data
+      - name: attr_tickets_passenger_id
+      - name: attr_tickets_passenger_name
+      - name: tie_aircraft_flights
+      - name: tie_airports_flights_arrival
+      - name: tie_airports_flights_departure
+      - name: tie_bookings_tickets
+      - name: tie_flights_ticket_flights
+      - name: tie_tickets_ticket_flights
+
+  - name: vertica-presentation
+    description: 'Presentation layer of product db.'
+    database: vertica
+    schema: presentation
+    tables:
+      - name: airports_traffic
+      - name: frequent_flyers

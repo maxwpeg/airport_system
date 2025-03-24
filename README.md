@@ -29,7 +29,7 @@
 там отправляются curl'ом в debezium
 - `./models` - пропиcанные dbt-модели
 - `dbt_project.yml` - это для dbt базовый конфиг
-- `init.sql` - проливает postgres мастер-базу
+- `init-postgres.sql` - проливает postgres мастер-базу
 - `profiles.yml` - конфиг для подключения dbt к vertica
 
 Собираем все командой

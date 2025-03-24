@@ -1,9 +1,0 @@
-{{ config(materialized='incremental', unique_key='attribute_key') }}
-
-SELECT
-    md5(cast(book_ref || after_book_date as varchar)) AS attribute_key,
-    md5(cast(book_ref as varchar)) AS anchor_key,
-    after_book_date AS book_date,
-    source_txId AS source_system_id,
-    ts_ms AS createdAt
-FROM {{ source('vertica', 'postgres_public_bookings') }}
