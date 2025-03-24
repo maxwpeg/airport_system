@@ -60,3 +60,11 @@ sources:
       - name: tie_bookings_tickets
       - name: tie_flights_ticket_flights
       - name: tie_tickets_ticket_flights
+
+  - name: vertica-presentation
+    description: 'Presentation layer of product db.'
+    database: vertica
+    schema: presentation
+    tables:
+      - name: airports_traffic
+      - name: frequent_flyers

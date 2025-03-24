@@ -14,7 +14,7 @@ WITH flights AS (
     LEFT JOIN {{ source('vertica-dwh', 'tie_tickets_ticket_flights') }} ttf ON atf.anchor_key = ttf.ticket_flight
     LEFT JOIN {{ source('vertica-dwh', 'anchor_tickets') }} at ON ttf.ticket = at.anchor_key
     LEFT JOIN {{ source('vertica-dwh', 'attr_tickets_passenger_id') }} atpi ON at.anchor_key = atpi.anchor_key
-    WHERE afaa2.actual_arrival::DATE = CURRENT_DATE - INTERVAL '1 day'
+    WHERE afaa2.actual_arrival::DATE = '{{ var("business_date") }}'
     GROUP BY af.business_key, afaa.arrival_airport, afda.departure_airport, afaa2.actual_arrival
     order by passengers desc, arrival_airport, departure_airport
 ),
