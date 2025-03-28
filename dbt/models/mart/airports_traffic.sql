@@ -9,12 +9,13 @@ WITH flights AS (
     JOIN {{ source('vertica-dwh', 'anchor_flights') }} af ON afaa.anchor_key = af.anchor_key
     JOIN {{ source('vertica-dwh', 'attr_flights_departure_airport') }} afda ON af.anchor_key = afda.anchor_key
     JOIN {{ source('vertica-dwh', 'attr_flights_actual_arrival') }} afaa2 ON af.anchor_key = afaa2.anchor_key
+    JOIN {{ source('vertica-dwh', 'attr_flights_actual_departure') }} afad ON af.anchor_key = afad.anchor_key
     LEFT JOIN {{ source('vertica-dwh', 'tie_flights_ticket_flights') }} tftf ON af.anchor_key = tftf.flight
     LEFT JOIN {{ source('vertica-dwh', 'anchor_ticket_flights') }} atf ON tftf.ticket_flight = atf.anchor_key
     LEFT JOIN {{ source('vertica-dwh', 'tie_tickets_ticket_flights') }} ttf ON atf.anchor_key = ttf.ticket_flight
     LEFT JOIN {{ source('vertica-dwh', 'anchor_tickets') }} at ON ttf.ticket = at.anchor_key
     LEFT JOIN {{ source('vertica-dwh', 'attr_tickets_passenger_id') }} atpi ON at.anchor_key = atpi.anchor_key
-    WHERE afaa2.actual_arrival::DATE = '{{ var("business_date") }}'
+    WHERE afaa2.actual_arrival::DATE = '{{ var("business_date") }}' OR afad.actual_departure::DATE = '{{ var("business_date") }}'
     GROUP BY af.business_key, afaa.arrival_airport, afda.departure_airport, afaa2.actual_arrival
     order by passengers desc, arrival_airport, departure_airport
 ),

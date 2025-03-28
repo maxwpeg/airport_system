@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@master" uuid="98ad7c4a-01ce-4c3c-8eb3-65d19ebfd777">
+    <data-source source="LOCAL" name="vertica@localhost" uuid="d1d2c213-e699-4ea6-9510-f65e81eb2315">
+      <driver-ref>vertica</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.vertica.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:vertica://localhost:5433/vertica</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="master@localhost" uuid="bc8d35be-c90b-463f-bcd9-40500ba70e2c">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="vertica@localhost" uuid="d1d2c213-e699-4ea6-9510-f65e81eb2315">
-      <driver-ref>vertica</driver-ref>
+    <data-source source="LOCAL" name="slave@localhost" uuid="612a4539-4d9b-4879-8916-baaf8cc3178d">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.vertica.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:vertica://localhost:5433/vertica</jdbc-url>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5434/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

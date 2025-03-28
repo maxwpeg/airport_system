@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 DEFAULT_ARGS = {
     'owner': 'komarov',
     'depends_on_past': False,
-    'start_date': datetime(2025, 3, 23),
+    'start_date': datetime.today() - timedelta(days=2),
     'email': None,
     'email_on_failure': False,
     'email_on_retry': False,
@@ -23,7 +23,7 @@ with DAG("dbt_airports_traffic_mart",
 
     task1 = BashOperator(
     task_id="delete",
-    bash_command="sleep 30 && cd /opt/airflow/dbt && dbt run --select \"models/mart/airports_traffic_clear.sql\" --vars '{\"business_date\": \"{{ macros.ds_add(ds, -1) }}\"}' || true",
+    bash_command="sleep 15 && cd /opt/airflow/dbt && dbt run --select \"models/mart/airports_traffic_clear.sql\" --vars '{\"business_date\": \"{{ macros.ds_add(ds, -1) }}\"}' || true",
     dag=dag,
     )
 

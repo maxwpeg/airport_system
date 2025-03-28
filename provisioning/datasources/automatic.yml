@@ -1,0 +1,47 @@
+apiVersion: 1
+
+datasources:
+- name: Vertica
+  type: vertica-grafana-datasource
+  access: proxy
+  url: host.docker.internal:5433
+  uid: my_vertica
+  password:
+  basicAuth: false
+  basicAuthUser:
+  basicAuthPassword:
+  withCredentials:
+  isDefault: true
+  jsonData:
+     url: host.docker.internal:5433
+     user: dbadmin
+     database: vertica
+     tlsAuth: false
+     tlsAuthWithCACert: false
+  secureJsonData:
+    tlsCACert: ""
+    tlsClientCert: ""
+    tlsClientKey: ""
+  version: 1
+  editable: true
+
+- name: Prometheus
+  type: prometheus
+  access: proxy
+  url: http://host.docker.internal:9090
+  uid: my_prometheus
+  password:
+  basicAuth: false
+  basicAuthUser:
+  basicAuthPassword:
+  withCredentials:
+  isDefault: false
+  jsonData:
+     tlsAuth: false
+     tlsAuthWithCACert: false
+  secureJsonData:
+    tlsCACert: ""
+    tlsClientCert: ""
+    tlsClientKey: ""
+  version: 1
+  editable: true

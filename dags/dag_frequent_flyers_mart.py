@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 DEFAULT_ARGS = {
     'owner': 'komarov',
     'depends_on_past': False,
-    'start_date': datetime(2025, 3, 23),
+    'start_date': datetime.today() - timedelta(days=2),
     'email': None,
     'email_on_failure': False,
     'email_on_retry': False,
@@ -23,6 +23,6 @@ with DAG("dbt_frequent_flyers_mart",
 
     task1 = BashOperator(
     task_id="mart",
-    bash_command="sleep 30 && cd /opt/airflow/dbt && dbt run --select \"models/mart/frequent_flyers.sql\" || true",
+    bash_command="sleep 15 && cd /opt/airflow/dbt && dbt run --select \"models/mart/frequent_flyers.sql\" || true",
     dag=dag,
     )

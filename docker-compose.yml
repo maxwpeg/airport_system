@@ -4,8 +4,8 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres-airflow/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres-airflow/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
@@ -24,7 +24,7 @@ x-airflow-common:
     &airflow-common-depends-on
     redis:
       condition: service_healthy
-    postgres:
+    postgres-airflow:
       condition: service_healthy
 
 
@@ -34,17 +34,18 @@ services:
     image: postgres:14.5
     restart: always
     volumes:
-#      - ./data:/var/lib/postgresql/data
-#      - ./data-slave:/var/lib/postgresql/data-slave
-#      - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
-#      - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
-#      - ./init-script:/etc/postgresql/init-script
+      - ./data:/var/lib/postgresql/data
+      - ./data-slave:/var/lib/postgresql/data-slave
+      - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
+      - ./init-script:/etc/postgresql/init-script
       - ./init-postgres.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./init-script/init.sh:/docker-entrypoint-initdb.d/init.sh
     ports:
       - "5432:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 60s
+      interval: 20s
       timeout: 5s
       retries: 5
     command:
@@ -56,19 +57,22 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
 
-#  postgres_slave:
-#    container_name: postgres_slave
-#    image: postgres:14.5
-#    restart: always
-#    volumes:
-#      - ./data-slave:/var/lib/postgresql/data
-#      - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
-#      - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
-#    ports:
-#      - "5435:5432"
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
+  postgres_slave:
+    container_name: postgres_slave
+    image: postgres:14.5
+    restart: always
+    volumes:
+      - ./data-slave:/var/lib/postgresql/data
+      - ./init-script/config/postgres.conf:/etc/postgresql/postgresql.conf
+      - ./init-script/config/pg_hba.conf:/etc/postgresql/pg_hba.conf
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      postgres_master:
+        condition: service_healthy
 
   vertica_dwh:
     container_name: vertica_dwh
@@ -83,7 +87,7 @@ services:
 #      broker:
 #        condition: service_healthy
     volumes:
-      - ./vertica-data:/data
+#      - ./vertica-data:/data
       - ./init-vertica.sql:/docker-entrypoint-initdb.d/init_schemas.sql
 
   zookeeper:
@@ -235,7 +239,7 @@ services:
          condition: service_healthy
      restart: "no"
 
-  postgres:
+  postgres-airflow:
     image: postgres:13
     container_name: postgres-airflow
     environment:
@@ -271,7 +275,7 @@ services:
     ports:
       - "8084:8080"
     healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://localhost:8084/health" ]
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -417,25 +421,43 @@ services:
       - -c
       - airflow
 
-  flower:
-    <<: *airflow-common
-    command: celery flower
-    container_name: flower
-    profiles:
-      - flower
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    environment:
+      GF_PLUGINS_PREINSTALL: vertica-grafana-datasource
     ports:
-      - "5555:5555"
-    healthcheck:
-      test: [ "CMD", "curl", "--fail", "http://localhost:5555/" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-    restart: always
+      - "3000:3000"
+    volumes:
+      - ./provisioning:/etc/grafana/provisioning
+      - ./dashboards:/var/lib/grafana/dashboards
     depends_on:
-      <<: *airflow-common-depends-on
-      airflow-init:
-        condition: service_completed_successfully
+      airflow-webserver:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      airflow-webserver:
+        condition: service_healthy
+
+  vertica-exporter:
+    image: maxwpeg/vertica-prometheus-exporter
+    container_name: vertica-exporter
+    ports:
+      - "9968:9968"
+    volumes:
+      - ./vertica-prometheus-exporter.yml:/bin/metrics/vertica-prometheus-exporter.yml
+    links:
+      - prometheus
+    depends_on:
+      airflow-webserver:
+        condition: service_healthy
 
 
 volumes:

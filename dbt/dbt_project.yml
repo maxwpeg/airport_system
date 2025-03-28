@@ -36,5 +36,5 @@ models:
       materialized: table
       schema: dwh
     mart:
-      materialized: incremental
+      materialized: table
       schema: presentation

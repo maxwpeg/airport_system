@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 DEFAULT_ARGS = {
     'owner': 'komarov',
     'depends_on_past': False,
-    'start_date': datetime(2025, 3, 23),
+    'start_date': datetime.today() - timedelta(days=1),
     'email': None,
     'email_on_failure': False,
     'email_on_retry': False,
